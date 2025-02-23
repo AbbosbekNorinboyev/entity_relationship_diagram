@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.entity_relationship_diagram.dto.ResponseDTO;
 import uz.pdp.entity_relationship_diagram.dto.ShowingCreateDTO;
 import uz.pdp.entity_relationship_diagram.entity.Showing;
-import uz.pdp.entity_relationship_diagram.service.impl.ShowingServiceImpl;
+import uz.pdp.entity_relationship_diagram.service.ShowingService;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/showings")
 @RequiredArgsConstructor
 public class ShowingController {
-    private final ShowingServiceImpl showingService;
+    private final ShowingService showingService;
 
     @PostMapping
     public ResponseDTO<Showing> createShowing(@Valid @RequestBody ShowingCreateDTO showingCreateDTO,

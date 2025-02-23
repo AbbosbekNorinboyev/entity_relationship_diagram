@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.entity_relationship_diagram.dto.CinemaCreateDTO;
 import uz.pdp.entity_relationship_diagram.dto.ResponseDTO;
 import uz.pdp.entity_relationship_diagram.entity.Cinema;
-import uz.pdp.entity_relationship_diagram.entity.Theater;
 import uz.pdp.entity_relationship_diagram.service.CinemaService;
 
 import java.util.List;

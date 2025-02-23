@@ -16,7 +16,7 @@ public class Theater {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer capacity;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Cinema cinema;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

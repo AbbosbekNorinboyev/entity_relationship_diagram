@@ -33,4 +33,22 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseDTO<Void> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
+        return ResponseDTO.<Void>builder()
+                .code(404)
+                .message(resourceNotFoundException.getMessage())
+                .success(false)
+                .build();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseDTO<Void> handleException(Exception exception) {
+        return ResponseDTO.<Void>builder()
+                .code(500)
+                .message("Something wrong -> " + exception.getMessage())
+                .success(false)
+                .build();
+    }
 }

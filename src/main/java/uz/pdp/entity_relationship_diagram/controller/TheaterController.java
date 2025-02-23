@@ -7,7 +7,6 @@ import uz.pdp.entity_relationship_diagram.dto.ResponseDTO;
 import uz.pdp.entity_relationship_diagram.dto.TheaterCreateDTO;
 import uz.pdp.entity_relationship_diagram.entity.Theater;
 import uz.pdp.entity_relationship_diagram.service.TheaterService;
-import uz.pdp.entity_relationship_diagram.service.impl.TheaterServiceImpl;
 
 import java.util.List;
 

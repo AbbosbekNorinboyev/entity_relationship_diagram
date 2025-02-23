@@ -3,17 +3,15 @@ package uz.pdp.entity_relationship_diagram.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import uz.pdp.entity_relationship_diagram.dto.ErrorDTO;
 import uz.pdp.entity_relationship_diagram.dto.ResponseDTO;
 import uz.pdp.entity_relationship_diagram.dto.TheaterCreateDTO;
 import uz.pdp.entity_relationship_diagram.entity.Cinema;
 import uz.pdp.entity_relationship_diagram.entity.Theater;
+import uz.pdp.entity_relationship_diagram.exception.ResourceNotFoundException;
 import uz.pdp.entity_relationship_diagram.mapper.TheaterMapper;
 import uz.pdp.entity_relationship_diagram.repository.CinemaRepository;
 import uz.pdp.entity_relationship_diagram.repository.TheaterRepository;
 import uz.pdp.entity_relationship_diagram.service.TheaterService;
-import uz.pdp.entity_relationship_diagram.validation.TheaterValidation;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,27 +22,15 @@ public class TheaterServiceImpl implements TheaterService {
     private final TheaterMapper theaterMapper;
     private final CinemaRepository cinemaRepository;
     private final TheaterRepository theaterRepository;
-    private final TheaterValidation theaterValidation;
-
     @Override
     public ResponseDTO<Theater> createTheater(@NonNull TheaterCreateDTO theaterCreateDTO,
                                               @NonNull Integer cinemaId) {
-        List<ErrorDTO> errorDTOS = theaterValidation.validate(theaterCreateDTO);
-        if (!errorDTOS.isEmpty()) {
-            return ResponseDTO.<Theater>builder()
-                    .code(-1)
-                    .message("Theater validation error")
-                    .errors(errorDTOS)
-                    .build();
-        }
-
         Cinema cinema = cinemaRepository.findById(cinemaId)
-                .orElseThrow(() -> new RuntimeException("Cinema not found: " + cinemaId));
+                .orElseThrow(() -> new ResourceNotFoundException("Cinema not found: " + cinemaId));
         Theater theater = theaterMapper.toEntity(theaterCreateDTO);
         theater.setCinema(cinema);
         theater.setCreatedAt(LocalDateTime.now());
         theaterRepository.save(theater);
-
         return ResponseDTO.<Theater>builder()
                 .code(200)
                 .success(true)
@@ -56,7 +42,7 @@ public class TheaterServiceImpl implements TheaterService {
     @Override
     public ResponseDTO<Theater> getTheater(@NonNull Integer id) {
         Theater theater = theaterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Theater not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Theater not found: " + id));
         return ResponseDTO.<Theater>builder()
                 .code(200)
                 .success(true)
@@ -71,7 +57,7 @@ public class TheaterServiceImpl implements TheaterService {
         return ResponseDTO.<List<Theater>>builder()
                 .code(200)
                 .success(true)
-                .message("Theater found")
+                .message("Theater list found")
                 .data(theaters)
                 .build();
     }
@@ -80,15 +66,6 @@ public class TheaterServiceImpl implements TheaterService {
     public ResponseDTO<Theater> updateTheater(@NonNull TheaterCreateDTO theaterCreateDTO,
                                               @NonNull Integer theaterId,
                                               @NonNull Integer cinemaId) {
-        List<ErrorDTO> errorDTOS = theaterValidation.validate(theaterCreateDTO);
-        if (!errorDTOS.isEmpty()) {
-            return ResponseDTO.<Theater>builder()
-                    .code(-1)
-                    .message("Theater validation error")
-                    .errors(errorDTOS)
-                    .build();
-        }
-
         Optional<Cinema> cinemaOptional = cinemaRepository.findById(cinemaId);
         if (cinemaOptional.isEmpty()) {
             ResponseDTO.<Cinema>builder()
